@@ -1,0 +1,33 @@
+# Python environments and caches
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+._*
+*.swp
+*.swo
+*~
+
+# Archives and logs
+*.zip
+*.log
+*.err
+*.diff
+*.orig
+*.rej
+
+# Experiment outputs (large, regenerable). ALM-PU/output_ALMPU stays tracked.
+iFPNU/output*/
+iFPNU/out_models/
+iFPNU/run_*.txt
+iFPNU/wandb/
+PU_Hellinger_Trees/output*/
+PU_Hellinger_Trees/docs/
+
+# Local Claude Code settings
+.claude/settings.local.json
