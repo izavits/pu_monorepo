@@ -21,17 +21,12 @@ datasets = [
 ]
 
 MECHANISMS = ['SCAR', 'SAR']
-# F1 at the 0.5 threshold for the positive class, the negative class and their macro average
 F1_05_METRICS = ["f1_pos_05", "f1_neg_05", "f1_macro_05"]
-# F1 when the top pi (class prior) fraction of the test scores is predicted positive (only in this project)
 F1_PRIOR_METRICS = ["f1_pos_prior", "f1_neg_prior", "f1_macro_prior"]
-# PU trees: their F1 at the class-prior threshold (pos, neg, macro). NOTE: for now these use prob > prior
-# (prior of the whole dataset), not the top-prior-fraction rule used in this project and in ALM-PU
 DT_F1_PRIOR_COLS = ('f1_ci_pos_dt_puhd', 'f1_ci_neg_dt_puhd', 'f1_ci_macro_dt_puhd')  # decision tree
 SRF_F1_PRIOR_COLS = ('f1_ci_pos_srf_puhd', 'f1_ci_neg_srf_puhd', 'f1_ci_macro_srf_puhd')  # random forest
 METRICS = ["roc_auc", "ap", "f1", "std_roc", "std_ap", "std_f1"] + F1_05_METRICS + \
           [f'std_{m}' for m in F1_05_METRICS] + F1_PRIOR_METRICS + [f'std_{m}' for m in F1_PRIOR_METRICS]
-# Column names of the F1@0.5 metrics (pos, neg, macro) in the results of each project
 F1_05_COLS = ('f1_pos_05', 'f1_neg_05', 'f1_macro_05')  # this project
 ALMPU_F1_05_COLS = ('f1_pos', 'f1_neg', 'f1_macro')
 DT_F1_05_COLS = ('f1_pos_dt_puhd', 'f1_neg_dt_puhd', 'f1_macro_dt_puhd')  # PU trees: decision tree
@@ -186,7 +181,7 @@ def gather_results():
                 results['DIF'][label][ratio]['std_ap'].append(std_ap)
                 results['DIF'][label][ratio]['std_f1'].append(std_f1)
                 # ALM-PU (run in the ALM-PU project with the same splits as main_LBE.py)
-                path = f'./output_ALMPU/{data}_{label}_{ratio}_default_ALMPU/results.csv'
+                path = f'../ALM-PU/output_ALMPU/{data}_{label}_{ratio}_default_ALMPU/results.csv'
                 roc, ap, f1, std_roc, std_ap, std_f1 = parse_result_csv(path)
                 results['ALMPU'][label][ratio]['roc_auc'].append(roc)
                 results['ALMPU'][label][ratio]['ap'].append(ap)
@@ -203,7 +198,7 @@ def gather_hellinger_trees_results():
             'satellite', 'segment', 'seismic', 'shuttle', 'thyroid', 'yeast']
     # SCAR
     for d in data:
-        path = f'./pu_trees_results/output_hellinger/results_{d}.csv'
+        path = f'../PU_Hellinger_Trees/output/results_{d}.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -227,7 +222,7 @@ def gather_hellinger_trees_results():
             add_f1_prior('PUHRF', 'SCAR', ratio, grp, SRF_F1_PRIOR_COLS)
     # SAR
     for d in data:
-        path = f'./pu_trees_results/output_hellinger/results_{d}_sar.csv'
+        path = f'../PU_Hellinger_Trees/output/results_{d}_sar.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -256,7 +251,7 @@ def gather_imbNNPU_results():
             'satellite', 'segment', 'seismic', 'shuttle', 'thyroid', 'yeast']
     # SCAR
     for d in data:
-        path = f'./pu_trees_results/output_imbnnpu/results_{d}_imbnnpu.csv'
+        path = f'../PU_Hellinger_Trees/output_imbnnpu/results_{d}_imbnnpu.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -270,7 +265,7 @@ def gather_imbNNPU_results():
             add_f1_prior('imbNNPU', 'SCAR', ratio, grp, DT_F1_PRIOR_COLS)
     # SAR
     for d in data:
-        path = f'./pu_trees_results/output_imbnnpu/results_{d}_sar_imbnnpu.csv'
+        path = f'../PU_Hellinger_Trees/output_imbnnpu/results_{d}_sar_imbnnpu.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -289,7 +284,7 @@ def gather_nnpu_results():
             'satellite', 'segment', 'seismic', 'shuttle', 'thyroid', 'yeast']
     # SCAR
     for d in data:
-        path = f'./pu_trees_results/output_nnpu/results_{d}_nnpu.csv'
+        path = f'../PU_Hellinger_Trees/output_nnpu/results_{d}_nnpu.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -303,7 +298,7 @@ def gather_nnpu_results():
             add_f1_prior('nnPU', 'SCAR', ratio, grp, DT_F1_PRIOR_COLS)
     # SAR
     for d in data:
-        path = f'./pu_trees_results/output_nnpu/results_{d}_sar_nnpu.csv'
+        path = f'../PU_Hellinger_Trees/output_nnpu/results_{d}_sar_nnpu.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -322,7 +317,7 @@ def gather_upu_results():
             'satellite', 'segment', 'seismic', 'shuttle', 'thyroid', 'yeast']
     # SCAR
     for d in data:
-        path = f'./pu_trees_results/output_upu/results_{d}_upu.csv'
+        path = f'../PU_Hellinger_Trees/output_upu/results_{d}_upu.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]
@@ -336,7 +331,7 @@ def gather_upu_results():
             add_f1_prior('uPU', 'SCAR', ratio, grp, DT_F1_PRIOR_COLS)
     # SAR
     for d in data:
-        path = f'./pu_trees_results/output_upu/results_{d}_sar_upu.csv'
+        path = f'../PU_Hellinger_Trees/output_upu/results_{d}_sar_upu.csv'
         df = pd.read_csv(path)
         for r, grp in df.groupby(["flip_ratio"]):
             ratio = r[0]

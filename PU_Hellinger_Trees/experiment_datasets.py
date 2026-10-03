@@ -1,16 +1,16 @@
 """Single source of truth for the benchmark datasets and the label-noise mechanisms.
 
-Paths are relative to the repo root, so run the experiment scripts from there.
+Paths are relative to the PU_Hellinger_Trees folder, so run the experiment scripts from there.
 Method-level choices (models, metrics, partitions, flip ratios) deliberately stay
 in each experiment script; only the dataset table and the mechanical write/report
-helpers live here, because those are facts about `data/` rather than method.
+helpers live here, because those are facts about the datasets rather than method.
 """
 import os
 
 import numpy as np
 import pandas as pd
 
-DATA_DIR = './data'
+DATA_DIR = '../data'  # monorepo root, shared with iFPNU and ALM-PU
 
 # (file in data/, value written to the `dataset` column and used as the filename stem)
 DATASETS = [

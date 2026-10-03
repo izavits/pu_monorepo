@@ -43,7 +43,7 @@ PRIOR_F1S = ['f1_pos_prior', 'f1_neg_prior', 'f1_macro_prior']
 
 def parse_args():
     parser = argparse.ArgumentParser(description='ALM-PU in the iFPNU (main_LBE.py) setting')
-    parser.add_argument('--data', nargs='+', default=['./dataset'],
+    parser.add_argument('--data', nargs='+', default=['../data'],
                         help='csv file(s) and/or directories (every *.csv inside is used)')
     parser.add_argument('--exclude', nargs='*', default=[],
                         help="dataset names skipped when expanding directories")

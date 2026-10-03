@@ -1,14 +1,15 @@
 # PU monorepo
 
-Positive-Unlabeled (PU) learning research code, in three projects:
+Positive-Unlabeled (PU) learning prototype monorepo, in three projects:
 
 | Folder | Contents |
 | --- | --- |
-| `iFPNU/` | PU risk estimators, PNU risk estimators, one-step and two-step methods, and the benchmark that compares all methods (`gather_results.py`). Formerly the `pu_learning` repo. |
-| `PU_Hellinger_Trees/` | PU learning with tree-based classifiers (Hellinger trees, Cython) and different losses. Formerly the `pu_trees` repo. |
-| `ALM-PU/` | ALM-PU on the same tabular benchmarks, in the `iFPNU/main_LBE.py` setting. Formerly the `ALM-PU-Tab` repo. |
+| `iFPNU/` | PU risk estimators, PNU risk estimators, one-step and two-step methods |
+| `PU_Hellinger_Trees/` | PU learning with tree-based classifiers (Hellinger trees, Cython) and different losses. |
+| `ALM-PU/` | ALM-PU on the same tabular benchmarks. |
+| `data/` | The 14 tabular benchmark datasets (`scaled_*.csv`) used by all three projects. |
 
-Each project has its own Python version and dependencies, so each one has its own virtual environment. Run scripts from inside the project folder: paths such as `./data` in `iFPNU/config.ini`, and `../iFPNU/output_LBE` in ALM-PU, are relative to it.
+Each project has its own Python version and dependencies, so each one has its own virtual environment. Run scripts from inside the project folder: paths such as `../data` (the shared datasets) are relative to it.
 
 ## Setup
 
@@ -30,16 +31,15 @@ python3.14 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
 
-## Usage
+## Usage examples
 
 ```bash
 cd iFPNU && venv/bin/python main_LBE.py         # settings in config.ini
-cd ALM-PU && .venv/bin/python pu_benchmark.py   # compares against ../iFPNU/output_LBE
+cd ALM-PU && .venv/bin/python pu_benchmark.py
+cd PU_Hellinger_trees && venv/bin/python uPU_clean.py
 ```
 
-Experiment outputs (`output*/` folders) are not committed, except `ALM-PU/output_ALMPU/`.
+`iFPNU/gather_results.py` prints results from all methods. It reads ALM-PU and PU_Hellinger_Trees results straight from `../ALM-PU/output_ALMPU/` and `../PU_Hellinger_Trees/output*/`
 
 ## Notes
-
-- **xgboost in PU_Hellinger_Trees.** The working environment uses xgboost 2.1.3 built locally from source without OpenMP. The PyPI wheel that `requirements-lock.txt` installs instead needs `libomp.dylib` under `/usr/local/opt/libomp` (x86_64), and fails to import without it. Either install an x86_64 libomp there, or reuse the locally built xgboost package.
-- **`PU_Hellinger_Trees/expsetup_clean.py` runs its sweep at import time.** It has no `if __name__ == '__main__':` guard, so `import expsetup_clean` starts the experiments and writes to `output/`.
+- **xgboost in PU_Hellinger_Trees.** The working environment uses xgboost 2.1.3 built locally from source without OpenMP. 

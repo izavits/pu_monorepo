@@ -17,12 +17,12 @@ Versions are pinned to those used for the reported results (Python 3.14). The co
 .venv/bin/python pu_benchmark.py
 ```
 
-This runs every dataset in `dataset/` under SCAR and SAR labeling, hiding 25%, 50% and 75% of the training positives, with 10 runs per setting (run *i* uses split `random_state=i`). Settings that already have results are skipped; use `--overwrite` to rerun them.
+This runs every dataset in `../data/` (the monorepo's shared data folder) under SCAR and SAR labeling, hiding 25%, 50% and 75% of the training positives, with 10 runs per setting (run *i* uses split `random_state=i`). Settings that already have results are skipped; use `--overwrite` to rerun them.
 
 
 ## Datasets
 
-The 14 datasets in `dataset/` are headerless, standardized CSV files with a binary label in the last column; 1 is the positive (minority) class.
+The 14 datasets in `../data/`, shared with iFPNU and PU_Hellinger_Trees, are headerless, standardized CSV files with a binary label in the last column; 1 is the positive (minority) class.
 
 ## Reference
 This is based on the following work and cloned/modified from the respective code repo:

@@ -1,4 +1,4 @@
-"""ALM-PU on tabular csv datasets (e.g. dataset/scaled_*.csv) with the CardMLP model.
+"""ALM-PU on tabular csv datasets (e.g. ../data/scaled_*.csv) with the CardMLP model.
 
 Each csv is headerless: numeric feature columns followed by a binary label column.
 
@@ -38,7 +38,7 @@ METRICS = ['acc', 'auc', 'f1', 'prec', 'recall']
 
 def parse_args():
     parser = argparse.ArgumentParser(description='ALM-PU on tabular csv datasets')
-    parser.add_argument('--data', nargs='+', default=['./dataset'],
+    parser.add_argument('--data', nargs='+', default=['../data'],
                         help='csv file(s) and/or directories (every *.csv inside is used)')
     parser.add_argument('--exclude', nargs='*', default=[],
                         help="dataset names skipped when expanding directories (with or without the "
