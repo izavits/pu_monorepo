@@ -609,7 +609,6 @@ if __name__ == "__main__":
                     num_boost_round=10
                 )
             elif classifier_name == 'lgb_objective':
-                #custom_loss = nnpnu_focal_loss(y_true=y_pnu, gamma=2.0, eta=loss_eta, pi_p=loss_prior, lgb=True)
                 custom_loss = pnu_focal_loss(y_true=y_pnu, gamma=3.0, eta=loss_eta, pi_p=loss_prior, lgb=True)
                 params = {
                     'objective': custom_loss,

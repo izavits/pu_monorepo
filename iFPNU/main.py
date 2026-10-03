@@ -17,7 +17,6 @@ from pu.losses import SampleDependentFocalLoss, FocalLoss
 from pu.losses import FocalLossNNPU, SampleDependentFocalLossNNPU, SigmoidNNPU
 import logging
 import sys
-import wandb
 import xgboost as xgb
 from pu.fpu_xgb import PUFLLossNonNegative, FLLoss
 import lightgbm as lgb
@@ -192,7 +191,6 @@ if __name__ == "__main__":
     pu_ratio = float(config['RUN']['PU_RATIO'])
     labeling_mechanism = config['RUN']['LABELING_MECHANISM']
     num_runs = int(config['RUN']['NUM_RUNS'])
-    log_wandb = config['RUN'].getboolean('LOG_WANDB')
     run_all = config['RUN'].getboolean('RUN_ALL', fallback=False)
     # Loss parameters configuration
     loss_gamma = float(config['LOSS_PARAMS']['GAMMA'])
@@ -248,24 +246,6 @@ if __name__ == "__main__":
                     f'Model: {model_name} | {criterion_name}')
         logger.info(f'===========================================================')
         for i in range(num_runs):
-            run = None
-            if log_wandb:
-                # Setup wandb
-                run = wandb.init(
-                    # set the wandb project where this run will be logged
-                    project=f'{experiment_name} | {pu_ratio} {labeling_mechanism} | {model_name} | {criterion_name}',
-                    name=f"Run_{i + 1}",
-                    # track hyperparameters and run metadata
-                    config={
-                        "criterion": criterion_name,
-                        "architecture": model_name,
-                        "dataset": experiment_name,
-                        "epochs": max_epochs,
-                        #"alpha": loss_alpha,
-                        "gamma": loss_gamma
-                    }
-                )
-
             logger.info(f'>>>>>>>>>> Run {i + 1} <<<<<<<<<<')
             train_dl, test_dl, loss_prior = prepare_pu_data(dataset_path, pu_ratio, labeling_mechanism,
                                                             random_state=i)
@@ -330,9 +310,6 @@ if __name__ == "__main__":
             else:
                 criterion = None
 
-            if log_wandb:
-                run.watch(model)
-
             if model_name == 'xgb':
                 # train gradient boosting
                 model.fit(X_train, y_train)
@@ -340,7 +317,7 @@ if __name__ == "__main__":
                 model.fit(X_train, y_train)
             else:
                 train(train_dl, model, criterion, max_epochs, patience, log_interval, save_model,
-                      output_log_name, run=run)
+                      output_log_name)
             logger.info('Evaluating in test set..')
             if model_name == 'xgb' or 'xgb_objective':
                 acc, auc, rprecision, precision, recall, pr_area, best_f1, f1_pos, f1_neg, f1_macro, scores, plot = \
@@ -392,9 +369,6 @@ if __name__ == "__main__":
             f1_pos_prior_all.append(f1_pos_prior)
             f1_neg_prior_all.append(f1_neg_prior)
             f1_macro_prior_all.append(f1_macro_prior)
-            if log_wandb:
-                # Finish run to sync with wandb
-                run.finish()
         # Average and summarize results
         results = average_results(acc_all, auc_all, rprecision_all, precision_all, recall_all,
                                   pr_area_all, f1_all, f1_pos_all, f1_neg_all, f1_macro_all,

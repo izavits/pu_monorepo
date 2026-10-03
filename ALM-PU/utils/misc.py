@@ -48,22 +48,6 @@ def accuracy(output, target):
     recall = recall_score(target, predicted)
     return acc, auc, f1, recall, prec
 
-def accuracy1(output, target):
-    """Computes the precision@k for the specified values of k"""
-    batch_size = target.size(0)
-    _, predicted = torch.max(output.data, 1)
-    prob = torch.clamp(F.softmax(output.detach(), dim=1), 1e-10, 1-1e-10)
-    prob = np.array(prob.cpu().detach())
-    predicted = np.array(predicted.cpu().detach())
-    target = np.array(target.cpu().detach())
-    acc = accuracy_score(target, predicted)
-    auc = roc_auc_score(target, prob[:, 1])
-    # auc = 0
-    f1 = f1_score(target, predicted)
-    prec = precision_score(target, predicted)
-    recall = recall_score(target, predicted)
-    return acc, auc, f1, prec, recall
-
 
 def set_seed(args):
     random.seed(args.seed)
@@ -86,16 +70,6 @@ def get_cosine_schedule_with_warmup(optimizer,
         return max(0., math.cos(math.pi * num_cycles * no_progress))
 
     return LambdaLR(optimizer, _lr_lambda, last_epoch)
-
-
-def interleave(x, size):
-    s = list(x.shape)
-    return x.reshape([-1, size] + s[1:]).transpose(0, 1).reshape([-1] + s[1:])
-
-
-def de_interleave(x, size):
-    s = list(x.shape)
-    return x.reshape([size, -1] + s[1:]).transpose(0, 1).reshape([-1] + s[1:])
 
 
 def three_sigma(x):

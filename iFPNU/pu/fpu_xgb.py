@@ -212,21 +212,3 @@ def nnpnu_focal_loss(y_true, gamma=3.0, eta=0.5, pi_p=0.3, clip=1e-7, lgb=False)
         hess = np.maximum(hess, 1e-6)  # Stability
         return grad, hess
     return loss
-
-
-def focal_loss_eval_error(y_pred, y_true, gamma):
-    """
-    Adapation of the Focal Loss to be used as evaluation loss
-    Parameters:
-    -----------
-    y_pred: numpy.ndarray
-        array with the predictions
-    dtrain: lightgbm.Dataset
-    alpha, gamma: float
-        See original paper https://arxiv.org/pdf/1708.02002.pdf
-    """
-    g = gamma
-    p = 1 / (1 + np.exp(-y_pred))
-    loss = -(y_true + (1 - y_true)) * ((1 - (y_true * p + (1 - y_true) * (1 - p))) ** g) * (
-            y_true * np.log(p) + (1 - y_true) * np.log(1 - p))
-    return 'focal_loss', np.mean(loss), False

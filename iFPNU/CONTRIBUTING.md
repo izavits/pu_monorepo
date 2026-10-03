@@ -7,9 +7,9 @@ serve as a friendly guide for making your first contribution.
 
 You will need:
 
-- Python 3
+- Python 3.9
 - A virtual environment
-- The dependencies described in requirements.txt
+- The dependencies pinned in requirements-lock.txt
 - The dataset
 
 ### Cloning the project
@@ -24,9 +24,8 @@ cd pu_monorepo/iFPNU
 - Create your virtual environment and install the required dependencies:
 
 ```
-virtualenv -p `which python3` venv
-source venv/bin/activate
-pip install -r requirements.txt
+python3.9 -m venv venv
+venv/bin/pip install --no-deps -r requirements-lock.txt
 ``` 
 
 

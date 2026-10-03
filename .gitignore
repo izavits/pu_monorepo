@@ -26,7 +26,9 @@ output*/
 iFPNU/out_models/
 iFPNU/run_*.txt
 iFPNU/wandb/
-PU_Hellinger_Trees/docs/
+
+# Cython build scratch (setup.py build_ext)
+PU_Hellinger_Trees/build/
 
 # Claude Code files
 CLAUDE.md
